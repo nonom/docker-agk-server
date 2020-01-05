@@ -33,4 +33,4 @@ Open the port 9000
 
 ## Download the test client
 
-[SOON (tm)]
+https://drive.google.com/open?id=1mveuneeJ0yIJD5uadCweTnrsbbD-9mtU

@@ -1,0 +1,1 @@
+php AGKServer.php debug

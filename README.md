@@ -11,7 +11,7 @@ docker build --rm -f "Dockerfile" -t nonom/docker-agk-server:latest "."
 ## Running the image
 
 ```bash
- docker run -it --name agk-server nonom/docker-agk-server:latest
+ docker run -it --name <id> nonom/docker-agk-server:latest
 ```
 
 ## Socket service

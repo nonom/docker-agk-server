@@ -33,8 +33,9 @@ Open the port 9000
 
 ## Download the test client
 
+Since the test server is up you can use
 https://drive.google.com/open?id=1mveuneeJ0yIJD5uadCweTnrsbbD-9mtU
 
 ## Test client sources
 
-[SOON(tm)]
+Will published the next days

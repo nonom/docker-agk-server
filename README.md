@@ -38,4 +38,5 @@ https://drive.google.com/open?id=1mveuneeJ0yIJD5uadCweTnrsbbD-9mtU
 
 ## Test client sources
 
-Will published the next days
+Will published the next days in their own repository, actually can be found here:
+https://forum.thegamecreators.com/thread/221048

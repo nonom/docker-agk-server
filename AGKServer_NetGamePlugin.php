@@ -69,7 +69,7 @@ function NGP_sendWorldState($ChannelNumber)
     global $PlayersPosition;
     global $NGP_SlotConstants;
     //writeLog("Notify Channel WorldState : " . $ChannelNumber);
-    if (microtime(true)-@$SendNetworkStateTimer[$ChannelNumber] > NETGAMEPLUGIN_WORLDSTATE_INTERVAL / 1000000) {
+    if (microtime(true) - @$SendNetworkStateTimer[$ChannelNumber] > NETGAMEPLUGIN_WORLDSTATE_INTERVAL / 1000000) {
 
         $SendNetworkStateTimer[$ChannelNumber] = microtime(true);
         //writeLog("Refresh Network State");
@@ -118,7 +118,6 @@ function NGP_initClient($iClientID)
     $msgWSInterval->AddNetworkMessageInteger(6665) // Message identifier to send WORLD_STEP_INTERVAL
         ->AddNetworkMessageInteger(NETGAMEPLUGIN_WORLDSTATE_INTERVAL / 1000)
         ->Send($iClientID);
-
 }
 
 function NGP_destroyClient($iClientID)
@@ -133,7 +132,6 @@ function NGP_SetClientState($iClientID, $SlotNumber, $Value)
 {
     global $PlayersPosition;
     $PlayersPosition[$iClientID]["SLOT_" . $SlotNumber] = $Value;
-
 }
 
 function NGP_GetClientState($iClientID)
@@ -146,7 +144,6 @@ function NGP_GetClientState($iClientID)
     }
 
     return $tmpState;
-
 }
 
 function NGP_CheckForReceivedMovements($iSenderID, $iDestinationID, $Message)
@@ -175,11 +172,8 @@ function NGP_CheckForReceivedMovements($iSenderID, $iDestinationID, $Message)
             //writeLog(print_r($tmpPlayerMove, true));
             $PlayerMoves[$iSenderID][] = $tmpPlayerMove;
             NGP_ApplyMovement($iSenderID, $tmpPlayerMove);
-
         }
-
     }
-
 }
 
 /***** Internal Functions *****/

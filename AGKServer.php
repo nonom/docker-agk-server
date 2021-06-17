@@ -224,7 +224,6 @@ function onAGKClientNetworkMessage($iSenderID, $iDestinationID, $Message)
         // Stop propagation of the message to the tzrgetted clients ? No ! ...
         // StopPropagation();
     }
-
 }
 
 define("SERVER_DEBUG", false); // Display server Debug informations (true/false)
@@ -316,7 +315,6 @@ function _agk_new_connection($channel)
     if (SERVER_DEBUG) {
         writeLog("New connection ($channel) from $remote_address on port $report_port" . PHP_EOL);
     }
-
 }
 // The event fired by new data passes the channel as well as the current buffer
 // one byte at a time.
@@ -339,7 +337,6 @@ if ($buffer == "q" || $buffer == "Q") {
 $AGKSocket->close($channel, "Channel closed by Q detection.");
 }
  */
-
 }
 
 function _AGK_HandleReceivedData($channel, $buffer)
@@ -384,7 +381,8 @@ function _AGK_HandleReceivedData($channel, $buffer)
         foreach ($_AGK_Players as $PlayerChannel => $PlayerName) {
             if ($_AGK_subChannel[$PlayerChannel] == 0) {
                 $nbMainRoomPlayers++;
-            }}
+            }
+        }
         $AGKSocket->write($channel, int2bin(($nbMainRoomPlayers + 1)));
 
         // Number 1 => The Server
@@ -409,7 +407,6 @@ function _AGK_HandleReceivedData($channel, $buffer)
             $ClientVars = _AGK_sendNetworkAllVariables($PlayerChannel, $channel, 1);
             // Trame declaration joueur existant + variables
             $AGKSocket->write($channel, int2bin($PlayerChannel + 2) . int2bin(strlen($PlayerName)) . $PlayerName . int2bin($ClientVars['CountVars']) . $ClientVars['Vars']);
-
         }
 
         // Notify Other Clients of the join (MSGID 1 )
@@ -424,7 +421,6 @@ function _AGK_HandleReceivedData($channel, $buffer)
             // Alert client
             //$AGKSocket->write($PlayerChannel, chr(1).chr(00).chr(00).chr(00));
             $AGKSocket->write($PlayerChannel, int2bin(1) . int2bin($newPlayerID) . int2bin(strlen($ClientName)) . $ClientName);
-
         }
 
         // Enregistrement du  nouveau joueur
@@ -441,7 +437,7 @@ function _AGK_HandleReceivedData($channel, $buffer)
         return (1);
     }
 
-//////////////////////////////////////////////////////////////////// COMMANDS ///////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////// COMMANDS ///////////////////////////////////////////////////////
     //while (strlen($buffer) > 0) {
     // Consommer le buffer !
     $AGKCommand = bin2int(substr($buffer, 0, 4));
@@ -510,7 +506,6 @@ function _AGK_HandleReceivedData($channel, $buffer)
             }
 
             $buffer = substr($buffer, 4 + $VariableNameLength + 4 + 4 + 4);
-
         }
 
         if (!$StopPropagation) {
@@ -521,7 +516,6 @@ function _AGK_HandleReceivedData($channel, $buffer)
                 }
 
                 $AGKSocket->write($PlayerChannel, int2bin(2) . int2bin($channel + 2) . substr($bkpBuffer, 4, strlen($bkpBuffer) - 4 - strlen($buffer)));
-
             }
         }
 
@@ -589,7 +583,6 @@ function _AGK_HandleReceivedData($channel, $buffer)
             }
 
             $buffer = substr($buffer, 8);
-
         }
 
         if (!$StopPropagation) {
@@ -601,7 +594,6 @@ function _AGK_HandleReceivedData($channel, $buffer)
                 }
 
                 $AGKSocket->write($PlayerChannel, int2bin(3) . int2bin($channel + 2) . substr($bkpBuffer, 4, strlen($bkpBuffer) - 4 - strlen($buffer)));
-
             }
         }
         if (strlen($buffer) > 0) {
@@ -659,7 +651,6 @@ function _AGK_HandleReceivedData($channel, $buffer)
                             $AGKSocket->write($DestID - 2, int2bin(5) . int2bin($ClientID) . substr($buffer, 12, 4 + $MsgLength));
                         }
                     }
-
                 }
             }
 
@@ -726,7 +717,6 @@ function _AGK_notifyNewChannelToUser($channel, $oldChannelNumber, $newChannelNum
             $AGKSocket->write($channel, int2bin(4) . int2bin($PlayerChannel + 2));
             //Notify others clients of the quit of the current client
             $AGKSocket->write($PlayerChannel, int2bin(4) . int2bin($channel + 2));
-
         }
     }
 
@@ -758,12 +748,10 @@ function _AGK_notifyNewChannelToUser($channel, $oldChannelNumber, $newChannelNum
 
             // Send Server Variable of the new channel to the new Client of this room
             _AGK_sendServerNetworkAllVariables($newChannelNumber, $channel);
-
         }
     }
 
     onAGKClientChangeChannel($channel + 2, $oldChannelNumber, $newChannelNumber);
-
 }
 
 function _AGK_sendNetworkAllVariables($fromChannel, $toChannel, $returnBinary = 0)
@@ -793,7 +781,6 @@ function _AGK_sendNetworkAllVariables($fromChannel, $toChannel, $returnBinary = 
         } else {
             return array("CountVars" => count($_AGK_PlayersVariables[$fromChannel]), "Vars" => $binVarMsg);
         }
-
     }
 }
 
@@ -850,10 +837,8 @@ function _agk_tick()
         foreach ($_AGK_Players as $PlayerChannel => $PlayerName) {
             if ($LastClientsPingCheck - $_AGK_Players_PingState[$PlayerChannel] > MAX_PING_TIMEOUT_SECONDS) {
                 $AGKSocket->close($PlayerChannel, "Ping Timeout !");
-
             }
         }
-
     }
 
     //system("clear");
@@ -909,9 +894,9 @@ $ARGS = parseArgs($argv);
 if (empty(@$ARGS)) // Direct mode (no daemon)
 {
     echo "\n****************\n** AGK Server **\n****************\n\nArguments are : start, stop, direct\n---------------\n\n" .
-    basename($_SERVER["argv"][0]) . " start  " . chr(9) . "Start the AGK Server Daemon\n" .
-    basename($_SERVER["argv"][0]) . " stop   " . chr(9) . "Stop the AGK Server Daemon\n" .
-    basename($_SERVER["argv"][0]) . " debug  " . chr(9) . "Start the AGK Server in \"Direct / Debug Mode\" (no Daemon => CTRL+C to stop)\n";
+        basename($_SERVER["argv"][0]) . " start  " . chr(9) . "Start the AGK Server Daemon\n" .
+        basename($_SERVER["argv"][0]) . " stop   " . chr(9) . "Stop the AGK Server Daemon\n" .
+        basename($_SERVER["argv"][0]) . " debug  " . chr(9) . "Start the AGK Server in \"Direct / Debug Mode\" (no Daemon => CTRL+C to stop)\n";
 
     exit;
 }
@@ -922,13 +907,12 @@ if (@$ARGS[0] == "stop") // (stop daemon)
     //$AGKSocket->start();
     exec("killall -9 " . basename($_SERVER["argv"][0]), $output, $return);
     exit(0);
-
 }
 
 //echo basename($_SERVER["argv"][0]);
 if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
     exec("pgrep -f " . basename($_SERVER["argv"][0]), $output, $return);
-//var_dump($output);
+    //var_dump($output);
 
     if (count($output) > 2) {
         die("Process " . basename($_SERVER["argv"][0]) . " (" . $output[0] . ") is already running\n");
@@ -954,7 +938,6 @@ if (@$ARGS[0] == "debug") // Direct mode (no daemon)
     writeLog("------------------------------------------------------------");
     $AGKSocket->start();
     exit(0);
-
 }
 
 function writeLog($string)
@@ -1058,7 +1041,6 @@ function GetChannelClientsCount($ChannelNumber)
     } else {
         return $ChannelsCount[$ChannelNumber] + 1; // + 1 for Server
     }
-
 }
 
 function GetChannelsList()
@@ -1071,7 +1053,6 @@ function GetChannelsList()
         if (!in_array($ChannelNb, $channelsList)) {
             $channelsList[] = $ChannelNb;
         }
-
     }
 
     return $channelsList;
@@ -1132,7 +1113,6 @@ function forceChannelJoin($PlayerID, $ChannelNumber)
     $previousChannel = $_AGK_subChannel[$PlayerID - 2];
     $_AGK_subChannel[$PlayerID - 2] = $ChannelNumber;
     _AGK_notifyNewChannelToUser($PlayerID - 2, $previousChannel, $ChannelNumber);
-
 }
 
 function GetNetworkClientInteger($PlayerID, $VariableName)
@@ -1174,7 +1154,6 @@ function GetNetworkMessageString(&$IncomingMessage)
     $String = substr($IncomingMessage, 4, $stringLength[1]);
     $IncomingMessage = substr($IncomingMessage, 4 + $stringLength[1]);
     return $String;
-
 }
 
 function GetNetworkMessageInteger(&$IncomingMessage)
@@ -1243,7 +1222,6 @@ function _SetServerNetworkLocalVariable($ChannelNumber, $VariableName, $Value, $
                 if ($Type == 1) {
                     $AGKSocket->write($PlayerChannel, int2bin(3) . int2bin(1) . int2bin(1) . int2bin($i) . float2bin($ChannelServerVariables["Value"]));
                 }
-
             }
 
             break;
@@ -1273,11 +1251,8 @@ function _SetServerNetworkLocalVariable($ChannelNumber, $VariableName, $Value, $
             if ($Type == 1) {
                 $AGKSocket->write($PlayerChannel, int2bin(2) . int2bin(1) . int2bin(1) . int2bin(strlen($VariableName)) . $VariableName . $ResetMode . int2bin(1) . float2bin($Value));
             }
-
         }
-
     }
-
 }
 
 /////////////// CLASS NETWORK MESSAGE ///////////////////////////////////////////////
@@ -1326,7 +1301,6 @@ class NetworkMessage
             foreach ($_AGK_Players as $channel => $PlayerName) {
                 $AGKSocket->write($channel, $messageGlobalData);
             }
-
         } else {
             if (isset($_AGK_Players[$DestID - 2])) {
                 // Alert client
@@ -1356,7 +1330,6 @@ class NetworkMessage
         $this->messageData = array();
         return $this;
     }
-
 }
 
 /***************************************************************************
@@ -1548,7 +1521,7 @@ class floSocket
                     // New connection, activate event and add channel.
                     socket_set_nonblock($newsocket);
                     $channel = $this->getFreeChannel();
-//                  echo "Channel attribue : ".$channel."\n";
+                    //                  echo "Channel attribue : ".$channel."\n";
                     $this->sockets[$channel] = $newsocket;
                     //$channel = array_pop(array_keys($this->sockets));
                     //$channel=$this->getFreeChannel();
@@ -1675,7 +1648,6 @@ class floSocket
             if (!isset($this->sockets[$i])) {
                 return $i;
             }
-
         }
         return $NewSocket;
     }
@@ -1735,7 +1707,7 @@ Comments    : clsDaemonize is a class intended to automate the creation of syste
 
  */
 
-declare (ticks = 1);
+declare(ticks=1);
 class clsDaemonize
 {
 
@@ -1765,7 +1737,6 @@ class clsDaemonize
 
         $this->logFP = fopen($log_file, "a");
         $this->writeLog("Start daemon ($deamonname)");
-
     }
 
     /*
@@ -1786,7 +1757,6 @@ class clsDaemonize
     {
 
         $this->sdProcess = $sdProc;
-
     }
 
     /*
@@ -1834,7 +1804,6 @@ class clsDaemonize
                 $child_proc();
             }
         }
-
     }
 
     /*
@@ -1846,9 +1815,7 @@ class clsDaemonize
     {
 
         pcntl_signal($signal, $function);
-
     }
-
 }
 
 function parseArgs($argv)
